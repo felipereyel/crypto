@@ -1,10 +1,23 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import CryptoJS from "crypto-js";
 import { ref } from 'vue';
 
 const plaintext = ref('');
 const ciphertext = ref('');
 const key = ref('');
+
+onMounted(() => {
+  const params = new URLSearchParams(window.location.search);
+  const c = params.get('c');
+  const p = params.get('p');
+  if (c !== null) {
+    ciphertext.value = c;
+  }
+  if (p !== null) {
+    plaintext.value = p;
+  }
+});
 
 function encrypt(plainText: string, key: string): string {
     return CryptoJS.AES.encrypt(plainText, key).toString();
