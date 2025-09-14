@@ -1,6 +1,6 @@
 <script setup lang="ts">
 function copyLink(type: 'c' | 'p') {
-  let url = new URL(window.location.href);
+  const url = new URL(window.location.href);
   if (type === 'c') {
     url.searchParams.set('c', ciphertext.value);
     url.searchParams.delete('p');
@@ -59,14 +59,14 @@ function onDecrypt() {
 <template>
   <main class="crypto-main">
     <div class="crypto-areas">
-      <div class="crypto-block">
+      <div class="crypto-block cipher">
         <div class="crypto-title-row">
           <h2>Ciphertext</h2>
           <button class="copy-link-btn" @click="copyLink('c')" title="Copy link to this ciphertext">🔗</button>
         </div>
         <textarea v-model="ciphertext" class="crypto-textarea" placeholder="Ciphertext"></textarea>
       </div>
-      <div class="crypto-block">
+      <div class="crypto-block plain">
         <div class="crypto-title-row">
           <h2>Plaintext</h2>
           <button class="copy-link-btn" @click="copyLink('p')" title="Copy link to this plaintext">🔗</button>
@@ -146,8 +146,13 @@ html, body, #app, .crypto-main {
 }
 .crypto-block h2 {
   margin-bottom: 0.5rem;
-  color: #2563eb;
   font-size: 1.2rem;
+}
+.crypto-block.cipher h2 {
+  color: #2563eb;
+}
+.crypto-block.plain h2 {
+  color: #f59e42;
 }
 .crypto-textarea {
   width: 100%;
