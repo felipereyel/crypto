@@ -1,4 +1,15 @@
 <script setup lang="ts">
+function copyLink(type: 'c' | 'p') {
+  let url = new URL(window.location.href);
+  if (type === 'c') {
+    url.searchParams.set('c', ciphertext.value);
+    url.searchParams.delete('p');
+  } else {
+    url.searchParams.set('p', plaintext.value);
+    url.searchParams.delete('c');
+  }
+  navigator.clipboard.writeText(url.toString());
+}
 import { onMounted } from 'vue';
 import CryptoJS from "crypto-js";
 import { ref } from 'vue';
@@ -49,11 +60,17 @@ function onDecrypt() {
   <main class="crypto-main">
     <div class="crypto-areas">
       <div class="crypto-block">
-        <h2>Ciphertext</h2>
+        <div class="crypto-title-row">
+          <h2>Ciphertext</h2>
+          <button class="copy-link-btn" @click="copyLink('c')" title="Copy link to this ciphertext">🔗</button>
+        </div>
         <textarea v-model="ciphertext" class="crypto-textarea" placeholder="Ciphertext"></textarea>
       </div>
       <div class="crypto-block">
-        <h2>Plaintext</h2>
+        <div class="crypto-title-row">
+          <h2>Plaintext</h2>
+          <button class="copy-link-btn" @click="copyLink('p')" title="Copy link to this plaintext">🔗</button>
+        </div>
         <textarea v-model="plaintext" class="crypto-textarea" placeholder="Plaintext"></textarea>
       </div>
     </div>
@@ -74,6 +91,26 @@ function onDecrypt() {
 </template>
 
 <style scoped>
+.crypto-title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.copy-link-btn {
+  background: none;
+  border: none;
+  color: var(--text-title, #60a5fa);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+.copy-link-btn:hover {
+  background: var(--block-bg, #23272f);
+  color: #fff;
+}
 html, body, #app, .crypto-main {
   width: 100vw;
   min-height: 100vh;
